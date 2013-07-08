@@ -3,17 +3,18 @@ using System;
 using System.Collections.Generic;
 using Rhino.Geometry;
 using SharpFE;
+using System.Linq;
 
 namespace SharpFEGrasshopper.Core.TypeClass
 {
 
-    public class GH_ConstantStrainTriangle : GH_Element
+    public class GH_ConstantStrainTriangle : GH_Element<LinearConstantStrainTriangle>
     {
 
 
         private List<Point3d> Points { get; set; }
         
-       
+        
         private GH_Material Material {get; set;}
         
         private double Thickness {get; set;}
@@ -21,89 +22,91 @@ namespace SharpFEGrasshopper.Core.TypeClass
 
         public GH_ConstantStrainTriangle(Point3d p0, Point3d p1, Point3d p2, GH_Material material, double thickness)
         {
-        	this.Points = new List<Point3d>();
-        	this.Points.Add(p0);
-        	this.Points.Add(p1);
-        	this.Points.Add(p2);
-        	
-        	this.Material = material;
-        	this.Thickness = thickness;
+            this.Points = new List<Point3d>();
+            this.Points.Add(p0);
+            this.Points.Add(p1);
+            this.Points.Add(p2);
+            
+            this.Material = material;
+            this.Thickness = thickness;
         }
 
         public override string ToString()
         {
-        	string s = "Triangle element: p0 = " + this.Points[0] + " p1 = " + this.Points[1] + " p2 = " + this.Points[2];
+            string s = "Triangle element: p0 = " + this.Points[0] + " p1 = " + this.Points[1] + " p2 = " + this.Points[2];
             return s;
         }
 
-        public override void ToSharpElement(GH_Model model)
+        public override LinearConstantStrainTriangle ToSharpElement(GH_Model model)
         {
-        	
-        	FiniteElementNode n0 = null;
-        	FiniteElementNode  n1 = null;
-        	FiniteElementNode  n2 = null;
-        	
-        	int n0Index = model.Points.IndexOf(this.Points[0]);
-        	int n1Index = model.Points.IndexOf(this.Points[1]);
-        	int n2Index = model.Points.IndexOf(this.Points[2]);
-        	
-        	switch (model.ModelType) {
-        			
-        			
-        		case ModelType.Full3D:
-        	
-        	if (n0Index == -1) {      //Node does not exist		
-        				n0 = model.Model.NodeFactory.Create(this.Points[0].X, this.Points[0].Y, this.Points[0].Z);
-        		model.Nodes.Add(n0);
-        		model.Points.Add(this.Points[0]);
-        	} else {
-        		n0 = model.Nodes[n0Index];
-        	}   
-        			        	if (n1Index == -1) {      //Node does not exist		
-        				n1 = model.Model.NodeFactory.Create(this.Points[1].X, this.Points[1].Y, this.Points[1].Z);
-        		model.Nodes.Add(n1);
-        		model.Points.Add(this.Points[1]);
-        	} else {
-        		n1 = model.Nodes[n1Index];
-        	}   
-        			        	if (n2Index == -1) {      //Node does not exist		
-        				n2 = model.Model.NodeFactory.Create(this.Points[2].X, this.Points[2].Y, this.Points[2].Z);
-        		model.Nodes.Add(n2);
-        		model.Points.Add(this.Points[2]);
-        	} else {
-        		n2 = model.Nodes[n2Index];
-        	}   
-
-			
-			
- 
-        	    
-			
-			if (n0 != null && n1 != null && n2 != null) {
-        				model.Model.ElementFactory.CreateLinearConstantStrainTriangle(n0, n1, n2, this.Material.ToSharpMaterial(), this.Thickness);
-        				                                                          
-			}
-			
-			break;
-			
-		default:
-			throw new Exception("Model type not valid: " + model.ModelType);
-			
-        	}
+            
+            IFiniteElementNode n0 = null;
+            IFiniteElementNode  n1 = null;
+            IFiniteElementNode  n2 = null;
+            
+            try
+            {
+                n0 = model.Points.First(kvp => kvp.Value == this.Points[0]).Key;
+            }
+            catch(InvalidOperationException)
+            {
+                n0 = createnewFENode(model, this.Points[0]);
+            }
+            
+            try
+            {
+                n1 = model.Points.First(kvp => kvp.Value == this.Points[1]).Key;
+            }
+            catch(InvalidOperationException)
+            {
+                n1 = createnewFENode(model, this.Points[1]);
+            }
+            
+            try
+            {
+                n2 = model.Points.First(kvp => kvp.Value == this.Points[2]).Key;
+            }
+            catch(InvalidOperationException)
+            {
+                n2 = createnewFENode(model, this.Points[2]);
+            }
+            
+            if (n0 != null && n1 != null && n2 != null)
+            {
+                return model.Model.ElementFactory.CreateLinearConstantStrainTriangle(n0, n1, n2, this.Material.ToSharpMaterial(), this.Thickness);
+                
+            }
+            
+            throw new Exception("No LinearConstantStrainTriangle could be created!");
         }
-    	
-	
-    	
+        
+        protected IFiniteElementNode createnewFENode(GH_Model model, Point3d pos)
+        {
+            IFiniteElementNode temp;
+            Point3d pnt = pos;
+            switch(model.ModelType)
+            {
+                case ModelType.Full3D:
+                    temp = model.Model.NodeFactory.Create(pnt.X, pnt.Y, pnt.Z);
+                    break;
+                default:
+                    throw new NotImplementedException(string.Format("GH_ConstantStrainTriangle.ToSharpElement is not implemented for a model type of {0}", model.ModelType));
+            }
+            
+            model.Points.Add(temp, pnt);
+            return temp;
+        }
+        
 
-    	
-		public override GeometryBase GetGeometry(GH_Model model)
-		{
-			throw new NotImplementedException("Triangle element. Geometry");
-		}
-    	
-		public override GeometryBase GetDeformedGeometry(GH_Model model)
-		{
-			throw new NotImplementedException("Triangle element. Deformed geometry");
-		}
+        
+        public override GeometryBase GetGeometry(GH_Model model)
+        {
+            throw new NotImplementedException("Triangle element. Geometry");
+        }
+        
+        public override GeometryBase GetDeformedGeometry(GH_Model model)
+        {
+            throw new NotImplementedException("Triangle element. Deformed geometry");
+        }
     }
 }

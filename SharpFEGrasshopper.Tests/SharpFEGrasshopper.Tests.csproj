@@ -49,10 +49,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GH_IO">
-      <HintPath>..\..\..\..\..\..\..\Program Files %28x86%29\Rhinoceros 4.0\Plug-ins\Grasshopper\GH_IO.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files %28x86%29\Grasshopper for Rhino 5\GH_IO.dll</HintPath>
     </Reference>
     <Reference Include="Grasshopper">
-      <HintPath>..\..\..\..\..\..\..\Program Files %28x86%29\Rhinoceros 4.0\Plug-ins\Grasshopper\Grasshopper.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files %28x86%29\Grasshopper for Rhino 5\Grasshopper.dll</HintPath>
     </Reference>
     <Reference Include="MathNet.Numerics">
       <HintPath>..\SharpFEGrasshopper.Core\lib\MathNet.Numerics.dll</HintPath>
@@ -61,7 +61,7 @@
       <HintPath>$(SharpDevelopBinPath)\Tools\NUnit\NUnit.Framework.dll</HintPath>
     </Reference>
     <Reference Include="RhinoCommon">
-      <HintPath>..\..\..\..\..\..\..\Program Files %28x86%29\Rhinoceros 4.0\Plug-ins\Grasshopper\rh_common\RhinoCommon.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files %28x86%29\Rhinoceros 5.0\System\RhinoCommon.dll</HintPath>
     </Reference>
     <Reference Include="SharpFE.Core">
       <HintPath>..\SharpFEGrasshopper.Core\lib\SharpFE.Core.dll</HintPath>

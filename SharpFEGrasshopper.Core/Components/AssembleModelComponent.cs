@@ -29,7 +29,7 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
             pManager.AddGenericParameter("Elements", "E", "Elements", GH_ParamAccess.list);
             pManager.AddGenericParameter("Supports", "S", "Supports", GH_ParamAccess.list);
             pManager.AddGenericParameter("Loads", "L", "Loads", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("ModelType","T", "Model type: 0 = 2D truss, 1 = 3D full", GH_ParamAccess.item, 0);
+            pManager.AddIntegerParameter("ModelType","T", "Model type: 0 = 2D truss, 1 = 3D full", GH_ParamAccess.item, 1);
 
             pManager[0].Optional = true;
             pManager[1].Optional = true;
@@ -43,14 +43,14 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<GH_Element> elements = new List<GH_Element>();
+            List<GH_Element<IFiniteElement>> elements = new List<GH_Element<IFiniteElement>>();
             List<GH_Support> supports = new List<GH_Support>();
             
             List<GH_Load> loads = new List<GH_Load>();
             
-            int modelType = 0;
+            int modelType = 1;
 
-            if (!DA.GetDataList<GH_Element>(0, elements))
+            if (!DA.GetDataList<GH_Element<IFiniteElement>>(0, elements))
             { 
                 return;
             }
@@ -70,7 +70,6 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
                 return;
             }
 
-            //Clear current structure... Perhaps change this for a more parametric approach, or opening existing files
             GH_Model model = null;
             
             switch (modelType)

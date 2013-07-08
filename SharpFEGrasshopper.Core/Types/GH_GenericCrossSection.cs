@@ -21,15 +21,29 @@ namespace SharpFEGrasshopper.Core.TypeClass
             private set;
         }
         
-        public GH_GenericCrossSection(double area, double iyy)
+        public double Izz
+        {
+            get;
+            private set;
+        }
+        
+        public double Ixx
+        {
+            get;
+            private set;
+        }
+        
+        public GH_GenericCrossSection(double area, double iyy, double izz, double ixx)
         {
             this.Area = area;
             this.Iyy = iyy;
+            this.Izz = izz;
+            this.Ixx = ixx;
         }
         
         public override ICrossSection ToSharpCrossSection()
         {
-            GenericCrossSection crossSection = new GenericCrossSection(this.Area, this.Iyy);
+            ICrossSection crossSection = new GenericCrossSection(this.Area, this.Iyy, this.Izz, this.Ixx);
             return crossSection;
         }
     }

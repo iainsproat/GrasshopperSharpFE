@@ -1,91 +1,63 @@
-﻿
-using System;
-using System.Collections.Generic;
-using Rhino.Geometry;
-using SharpFE;
-
-namespace SharpFEGrasshopper.Core.TypeClass
+﻿namespace SharpFEGrasshopper.Core.TypeClass
 {
-
-    public class GH_Node : GH_Element
-    {
-
-
-        private Point3d Position { get; set; }
+    using System;
+    using System.Linq;
+    using Rhino.Geometry;
+    using SharpFE;
     
+    public class GH_Node
+    {
+        public Point3d Position { get; set; }
 
-        public GH_Node(Point3d position)
+        public GH_Node(Point3d pos)
         {
-        	this.Position = position;
-      
+            if (pos == null)
+            {
+                throw new ArgumentNullException("pos");
+            }
+            
+            this.Position = pos;
         }
 
         public override string ToString()
         {
-            string s = "Node at " + this.Position;
-            return s;
+            return string.Format("Node at {0}", this.Position);
         }
 
-        public override void ToSharpElement(GH_Model model)
+        public IFiniteElementNode ToSharpElement(GH_Model model)
         {
-        	
-
-        	//Check if node already exist at position
-        	int index = model.Points.IndexOf(this.Position);
-        		
-        	FiniteElementNode node = null;
-        	
-        	switch (model.ModelType) {
-        			
-        			
-        	case ModelType.Full3D:
-        	
-        	if (index == -1) {      //Node does not exist		
-        		node = model.Model.NodeFactory.Create(this.Position.X, this.Position.Y, this.Position.Z);
-        		model.Nodes.Add(node);
-        		model.Points.Add(this.Position);
-        		this.Index = model.Points.Count-1;
-        		
-        	} else {
-        		node = model.Nodes[index];
-        		this.Index = index;
-        	}   
-        			break;
-        			
-        	case ModelType.Truss2D:
-        	
-        	if (index == -1) {      //Node does not exist		
-        		node = model.Model.NodeFactory.CreateFor2DTruss(this.Position.X, this.Position.Z);
-        		model.Nodes.Add(node);
-        		model.Points.Add(this.Position);
-        		this.Index = model.Points.Count-1;
-        		
-        	} else {
-        		node = model.Nodes[index];
-        		this.Index = index;
-        	}   
-
-
-			
-			break;
-			
-		default:
-			throw new Exception("Model type not valid: " + model.ModelType);
-			
-        	}
+            if (model == null)
+            {
+                throw new ArgumentNullException("model");
+            }
+            
+            try
+            {
+                return model.Points.First(kvp => kvp.Value == this.Position).Key;
+            }
+            catch (InvalidOperationException)
+            {
+                return this.CreateNewNode(model);
+            }          
         }
-    	
-
-
-    	
-		public override GeometryBase GetGeometry(GH_Model model)
-		{
-			throw new NotImplementedException("Node element. Geometry");
-		}
-    	
-		public override GeometryBase GetDeformedGeometry(GH_Model model)
-		{
-			throw new NotImplementedException("Node element. Deformed geometry");
-		}
+        
+        protected IFiniteElementNode CreateNewNode(GH_Model model)
+        {
+            FiniteElementNode node = null;
+            switch (model.ModelType)
+            {
+                case ModelType.Full3D:
+                    node = model.Model.NodeFactory.Create(this.Position.X, this.Position.Y, this.Position.Z);
+                    break;
+                case ModelType.Truss2D:
+                    node = model.Model.NodeFactory.CreateFor2DTruss(this.Position.X, this.Position.Z);
+                    break;
+                default:
+                    throw new NotImplementedException(string.Format("Model type not valid: {0}", model.ModelType));
+            }
+            
+            model.Points.Add(node, this.Position);
+            return node;
+        }
     }
 }
