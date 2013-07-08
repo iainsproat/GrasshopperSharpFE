@@ -22,12 +22,15 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddPointParameter("Point 0", "P0", "First point of triangle", GH_ParamAccess.item);
-            pManager.AddPointParameter("Point 1", "P1", "Second point of triangle", GH_ParamAccess.item);
-            pManager.AddPointParameter("Point 2", "P2", "Third point of triangle", GH_ParamAccess.item);
-            
-            pManager.AddGenericParameter("Material", "M", "Defines material of triangle", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Thickness", "T", "Thickness of element", GH_ParamAccess.item);
+     
+        	pManager.AddPointParameter("Point 0", "P0", "First point of triangle", GH_ParamAccess.item);
+        	pManager.AddPointParameter("Point 1", "P1", "Second point of triangle", GH_ParamAccess.item);
+           
+        	pManager.AddPointParameter("Point 2", "P2", "Third point of triangle", GH_ParamAccess.item);
+           
+           
+             pManager.AddGenericParameter("Material", "M", "Defines material of triangle", GH_ParamAccess.item);
+             pManager.AddNumberParameter("Thickness", "T", "Thickness of element", GH_ParamAccess.item);
 
         }
 
@@ -44,9 +47,11 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
             Point3d p1 = new Point3d();
             Point3d p2 = new Point3d();
 
+          
             GH_Material material = null;
             
             double thickness = 0;
+
 
             // Use the DA object to retrieve the data inside the first input parameter.
             // If the retieval fails (for example if there is no data) we need to abort.
@@ -55,8 +60,13 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
             if (!DA.GetData(2, ref p2 )) { return; }
             if (!DA.GetData(3, ref material)) { return; }
             if (!DA.GetData(4, ref thickness)) { return; }
+            
+            
 
-            GH_ConstantStrainTriangle triangle = new GH_ConstantStrainTriangle(p0, p1, p2, material, thickness);
+            GH_ConstantStrainTriangle triangle = new GH_ConstantStrainTriangle(p0,p1,p2,material,thickness);
+      
+          
+               
 
             DA.SetData(0, triangle);
         }
@@ -65,6 +75,6 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
         {
             get { return new Guid("4b81c7a4-ae6f-433b-b89c-c069a0d74c8c"); }
         }
-        //    protected override Bitmap Icon { get { return Resources.BarComponentIcon; } }
+    //    protected override Bitmap Icon { get { return Resources.BarComponentIcon; } }
     }
 }

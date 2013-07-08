@@ -49,16 +49,18 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
 			List<Point3d> displacedPoints = new List<Point3d>();
 			List<GeometryBase> displacedElements = new List<GeometryBase>();
 
-			foreach (KeyValuePair<IFiniteElementNode, Point3d> kvp in model.Points) {			
-				Vector3d vector = model.GetNodeDisplacement(kvp.Value);
-				Point3d point = model.GetDisplacedPoint(kvp.Value);
+			for (int i = 0; i < model.Nodes.Count; i++) {			
+				Vector3d vector = model.GetNodeDisplacement(i);
+				Point3d point = model.GetDisplacedPoint(i);
 				displacementVectors.Add(vector);
 				displacedPoints.Add(point);		
 			}
 			
-			foreach (GH_Element<IFiniteElement> element in model.Elements)
-			{
+			foreach (GH_Element element in model.Elements) {
+				
 				displacedElements.Add(element.GetDeformedGeometry(model));
+				
+				
 			}
 
 			DA.SetDataList(0, displacementVectors);

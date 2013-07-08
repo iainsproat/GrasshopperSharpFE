@@ -23,13 +23,9 @@ namespace SharpFEGrasshopper.Core.ClassComponent
             
             pManager.AddNumberParameter("Area", "A", "Area of cross section", GH_ParamAccess.item, 100);
             pManager.AddNumberParameter("Iyy", "Iyy", "Second moment of area around y-y axis of cross section", GH_ParamAccess.item, 200000);
-            pManager.AddNumberParameter("Izz", "Izz", "Second moment of area around z-z axis of cross section", GH_ParamAccess.item, 200000);
-            pManager.AddNumberParameter("Ixx", "Ixx", "Second moment of area around x-x axis of cross section", GH_ParamAccess.item, 200000);
             
             pManager[0].Optional = true;
             pManager[1].Optional = true;
-            pManager[2].Optional = true;
-            pManager[3].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -42,8 +38,6 @@ namespace SharpFEGrasshopper.Core.ClassComponent
             // Declare a variable for the input
             double area = -1;
             double iyy  = -1;
-            double izz  = -1;
-            double ixx  = -1;
 
             // Use the DA object to retrieve the data inside the first input parameter.
             // If the retieval fails (for example if there is no data) we need to abort.
@@ -57,17 +51,7 @@ namespace SharpFEGrasshopper.Core.ClassComponent
                 return;
             }
             
-            if (!DA.GetData(2, ref izz))
-            {
-                return;
-            }
-            
-            if (!DA.GetData(3, ref ixx))
-            {
-                return;
-            }
-            
-            GH_GenericCrossSection crossSection = new GH_GenericCrossSection(area, iyy, izz, ixx);
+            GH_GenericCrossSection crossSection = new GH_GenericCrossSection(area, iyy);
             
             DA.SetData(0, crossSection);
         }

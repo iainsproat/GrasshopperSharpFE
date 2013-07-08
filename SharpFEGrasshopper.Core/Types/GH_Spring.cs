@@ -7,25 +7,14 @@ using SharpFE;
 namespace SharpFEGrasshopper.Core.TypeClass
 {
 
-    public class GH_Spring : GH_Element<LinearConstantSpring>
+    public class GH_Spring : GH_Element
     {
-        private GH_Node Start
-        {
-            get;
-            set;
-        }
-        
-        private GH_Node End
-        {
-            get;
-            set;
-        }
-        
-        private double SpringConstant
-        {
-            get;
-            set;
-        }
+
+
+        private GH_Node Start { get; set; }
+        private GH_Node End { get; set; }
+        private double SpringConstant { get; set; }
+
 
         public GH_Spring(Point3d start, Point3d end, double springConstant)
         {
@@ -36,15 +25,24 @@ namespace SharpFEGrasshopper.Core.TypeClass
 
         public override string ToString()
         {
-            return string.Format("Spring from {0} to {1}", this.Start, this.End);
+            string s = "Spring from " + this.Start + " to " + this.End;
+            return s;
         }
 
-        public override LinearConstantSpring ToSharpElement(GH_Model model)
+        public override void ToSharpElement(GH_Model model)
         {
-        	IFiniteElementNode startNode = Start.ToSharpElement(model);
-        	IFiniteElementNode endNode = End.ToSharpElement(model);
         	
-        	return model.Model.ElementFactory.CreateLinearConstantSpring(startNode,endNode, this.SpringConstant);
+  
+        	
+        	Start.ToSharpElement(model);
+        	End.ToSharpElement(model);
+        	
+        	
+        	FiniteElementNode startNode = model.Nodes[Start.Index];
+        	FiniteElementNode endNode = model.Nodes[End.Index];
+        	
+        	model.Model.ElementFactory.CreateLinearConstantSpring(startNode,endNode, this.SpringConstant);
+        	
         }
     	
 		public override GeometryBase GetGeometry(GH_Model model)
