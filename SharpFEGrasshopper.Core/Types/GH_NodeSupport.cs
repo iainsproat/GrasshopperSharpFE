@@ -31,7 +31,7 @@ namespace SharpFEGrasshopper.Core.TypeClass
         
         public GH_NodeSupport(List<Point3d> positions, bool UX, bool UY, bool UZ, bool RX, bool RY, bool RZ)
         {
-            this.Nodes = positions;   
+            this.Nodes = positions;
             this.UX = UX;
             this.UY = UY;
             this.UZ = UZ;
@@ -69,6 +69,14 @@ namespace SharpFEGrasshopper.Core.TypeClass
                         if (RX) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.XX);}
                         if (RY) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.YY);}
                         if (RZ) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.ZZ);}
+                        break;
+                    case ModelType.Membrane2D:
+                        if (UX) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.X);}
+                        if (UY) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.Y);}
+                        // if (UZ) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.Z);}
+                        // if (RX) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.XX);}
+                        // if (RY) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.YY);}
+                        // if (RZ) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.ZZ);}
                         break;
                     default:
                         throw new Exception("No such model type: " + model.ModelType);

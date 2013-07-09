@@ -10,30 +10,18 @@
     [TestFixture]
     public class Truss2DTestClass
     {
-        
         GH_Spring spring1, spring2;
-        
-        
         GH_Model model;
-        
         Point3d point1, point2, point3;
-        
         double springConstant;
         GH_NodalLoad nodalLoad1, nodalLoad2;
-        
         GH_NodeSupport nodeSupport1, nodeSupport2;
-        
         Vector3d force, moment;
-        
-
         
         [SetUp]
         public void Setup()
         {
-            
-            
             model = new GH_Model(ModelType.Truss2D, new List<GH_Element>(), new List<GH_Load>(), new List<GH_Support>());
-            
             
             springConstant = 10;
             force = new Vector3d(0,0,10);
@@ -51,16 +39,17 @@
             nodeSupport2 = new GH_NodeSupport(point2, true, true, false, true, true, true);
         }
         
+        [Test]
         public void CanCreateTruss2DModel()
         {
             Assert.NotNull(model);
             Assert.NotNull(model.Model);
             Assert.AreEqual(model.Model.ModelType, ModelType.Truss2D);
         }
-
         
         [Test]
-        public void CanCreateSpring() {
+        public void CanCreateSpring() 
+        {
             
             Assert.NotNull(spring1);
         }
@@ -73,41 +62,36 @@
         }
         
         [Test]
-        public void	CanAddTwoSpringsWithSamePointToModel() {
+        public void	CanAddTwoSpringsWithSamePointToModel() 
+        {
             spring1.ToSharpElement(model);
             spring2.ToSharpElement(model);
             Assert.AreEqual(2, model.Model.ElementCount);
         }
         
-        
         [Test]
         public void CanCreateNodalLoad()
         {
-            
-            
             Assert.NotNull(nodalLoad1);
-            
         }
         
         [Test]
-        public void CanAddLoadToModel() {
-            
-            
+        public void CanAddLoadToModel() 
+        {
             spring1.ToSharpElement(model);
             nodalLoad1.ToSharpLoad(model);
-
         }
         
         [Test]
-        public void CanCreateNodeSupport() {
+        public void CanCreateNodeSupport() 
+        {
             Assert.NotNull(nodeSupport1);
         }
         
         
         [Test]
-        
-        public void CanAddSupportToModel() {
-            
+        public void CanAddSupportToModel() 
+        {
             spring1.ToSharpElement(model);
             nodeSupport1.ToSharpSupport(model);
             IFiniteElementNode node1 = model.Model.FindNodeNearTo(point1);
@@ -115,23 +99,16 @@
             Assert.IsTrue(model.Model.IsConstrained(node1, DegreeOfFreedom.Z));
         }
         
-        
         [Test]
-        
-        public void DoesModelSolve() {
-            
+        public void DoesModelSolve() 
+        {
             spring1.ToSharpElement(model);
-            //	spring2.toSharpElement(model);
             
             nodeSupport1.ToSharpSupport(model);
             nodeSupport2.ToSharpSupport(model);
             nodalLoad1.ToSharpLoad(model);
             
             model.Solve();
-            
-            
-            
-            
         }
     }
 }

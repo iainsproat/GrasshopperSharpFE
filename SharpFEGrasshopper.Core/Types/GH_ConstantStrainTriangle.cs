@@ -7,11 +7,11 @@
 
     public class GH_ConstantStrainTriangle : GH_Element
     {
-        private IList<Point3d> Points
-        {
-            get;
-            set;
-        }
+       private IList<Point3d> Points
+       {
+           get;
+           set;
+       }
         
         private GH_Material Material
         {
@@ -27,8 +27,7 @@
 
         public GH_ConstantStrainTriangle(Point3d p0, Point3d p1, Point3d p2, GH_Material material, double thickness)
         {
-            this.Points = new List<Point3d>{p0, p1, p2};
-            
+            this.Points = new List<Point3d>(){p0, p1, p2};
             this.Material = material;
             this.Thickness = thickness;
         }
@@ -49,12 +48,32 @@
         
         public override GeometryBase GetGeometry(GH_Model model)
         {
-            throw new NotImplementedException("Triangle element. Geometry");
+            return this.CreateMesh(this.Points);
         }
         
         public override GeometryBase GetDeformedGeometry(GH_Model model)
         {
-            throw new NotImplementedException("Triangle element. Deformed geometry");
+            IList<Point3d> displacedPoints = new List<Point3d>(this.Points.Count);
+            foreach (Point3d pnt in this.Points)
+            {
+                displacedPoints.Add(model.GetDisplacedPoint(pnt));
+            }
+            return this.CreateMesh(displacedPoints);
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mshPnts"></param>
+        /// <returns></returns>
+        protected Mesh CreateMesh(IList<Point3d> mshPnts)  //FIXME every face is a new mesh!
+        {
+            Mesh mesh = new Mesh();
+            mesh.Vertices.Add(mshPnts[0]);
+            mesh.Vertices.Add(mshPnts[1]);
+            mesh.Vertices.Add(mshPnts[2]);
+            mesh.Faces.AddFace(0, 1, 2); //FIXME this appears quite brittle - what if it is not 0, 1 & 2?
+            return mesh;
         }
     }
 }

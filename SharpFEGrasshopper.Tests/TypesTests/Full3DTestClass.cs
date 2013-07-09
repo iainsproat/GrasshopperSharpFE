@@ -43,7 +43,6 @@
             nodeSupport2 = new GH_NodeSupport(point4, true, true, true, true, true, true);
         }
         
-        
         [Test]
         public void CanCreateFull3DModel()
         {
@@ -121,15 +120,10 @@
             model.Loads.Add(new GH_NodalLoad(p5, new Vector3d(0,0,-1000), new Vector3d(0,0,0)));
             
             model.AssembleSharpModel();
-            
-            
             Assert.AreEqual(9, model.Model.ElementCount);
             
             model.Solve();
-            
-            
             Assert.NotNull(model.Results);
-            
 
             
             IFiniteElementNode nodeP2 = model.Model.FindNodeNearTo(p2);
@@ -177,7 +171,6 @@
             model.Solve();
             
             Assert.NotNull(model.Results);
-            
             
             IFiniteElementNode node2 = model.Model.FindNodeNearTo(point2);
             Assert.False(model.Model.IsConstrained(node2, DegreeOfFreedom.X));
