@@ -41,13 +41,11 @@ namespace SharpFEGrasshopper.Core.TypeClass
             return this.Model.ToString();
         }
         
-        public void Solve() {
-        	
-        	IFiniteElementSolver solver = new LinearSolver(this.Model);    	
+        public void Solve()
+        {
+        	IFiniteElementSolver solver = new LinearSolverSVD(this.Model);    	
         	this.Results = solver.Solve();
-        
         }
-        
         
         public Vector3d GetNodeDisplacement(int nodeIndex) {
         	

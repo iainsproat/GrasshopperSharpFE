@@ -131,8 +131,8 @@ namespace SharpFEGrasshopper.Tests.TypesTests
 			
 					model = new GH_Model(ModelType.Full3D);
 			
-					GH_CrossSection crossSection = new GH_RectangularCrossSection(100,100);
-					GH_Material material = new GH_ElasticMaterial(100,100,100,100);
+					crossSection = new GH_RectangularCrossSection(100,100);
+					material = new GH_ElasticMaterial(100,100,100,100);
 					
 					
 					Point3d p1 = new Point3d(-10,0,0);
