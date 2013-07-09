@@ -76,18 +76,14 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
             switch (modelType)
             {
                 case 0:
-                    model = new GH_Model(ModelType.Truss2D);
+                    model = new GH_Model(ModelType.Truss2D, elements, loads, supports);
                     break;
                 case 1:
-                    model = new GH_Model(ModelType.Full3D);
+                    model = new GH_Model(ModelType.Full3D, elements, loads, supports);
                     break;  
                 default:
                     throw new Exception("Model type does not exist or not yet implemented");
             }
-            
-            model.Elements = elements;
-            model.Loads = loads;
-            model.Supports = supports;
             
             model.AssembleSharpModel();
             
