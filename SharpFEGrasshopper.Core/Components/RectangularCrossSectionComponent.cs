@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 
 using Grasshopper.Kernel;
-using Rhino;
-using Rhino.Geometry;
 using SharpFEGrasshopper.Core.TypeClass;
-using SharpGrasshopper;
 
 namespace SharpFEGrasshopper.Core.ClassComponent {
 
@@ -22,13 +17,13 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-     
-        	pManager.AddNumberParameter("Heigth", "H", "Height of cross section", GH_ParamAccess.item, 100);
-        	pManager.AddNumberParameter("Width", "W", "Width of cross section", GH_ParamAccess.item, 100);
-        	
-        	 pManager[0].Optional = true;
+            
+            pManager.AddNumberParameter("Heigth", "H", "Height of cross section", GH_ParamAccess.item, 100);
+            pManager.AddNumberParameter("Width", "W", "Width of cross section", GH_ParamAccess.item, 100);
+            
+            pManager[0].Optional = true;
             pManager[1].Optional = true;
-          
+            
 
         }
 
@@ -51,9 +46,9 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
 
 
 
-      
+            
             GH_RectangularCrossSection crossSection = new GH_RectangularCrossSection(heigth, width);
-               
+            
 
             DA.SetData(0, crossSection);
         }

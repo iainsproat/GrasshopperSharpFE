@@ -7,7 +7,6 @@
     using Grasshopper.Kernel;
     using SharpFE;
     using SharpFEGrasshopper.Core.TypeClass;
-    using SharpGrasshopper;
 
     public class AssembleModelComponent : GH_Component
     {
@@ -22,7 +21,7 @@
             pManager.AddGenericParameter("Elements", "E", "Elements", GH_ParamAccess.list);
             pManager.AddGenericParameter("Supports", "S", "Supports", GH_ParamAccess.list);
             pManager.AddGenericParameter("Loads", "L", "Loads", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("ModelType","T", "Model type: 0 = 2D truss, 1 = 3D full", GH_ParamAccess.item, 0);
+            pManager.AddIntegerParameter("ModelType","T", "Model type: 0 = 2D truss, 1 = 3D full", GH_ParamAccess.item, 1);
 
             pManager[0].Optional = true;
             pManager[1].Optional = true;

@@ -7,7 +7,6 @@ namespace SharpFEGrasshopper.Core.ClassComponent
     
     using Grasshopper.Kernel;
     using SharpFEGrasshopper.Core.TypeClass;
-    using SharpGrasshopper;
 
     public class GenericCrossSectionComponent : GH_Component
     {
