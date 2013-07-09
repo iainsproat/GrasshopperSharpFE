@@ -6,15 +6,25 @@ using SharpFE;
 
 namespace SharpFEGrasshopper.Core.TypeClass
 {
-
     public class GH_Spring : GH_Element
     {
-
-
-        private GH_Node Start { get; set; }
-        private GH_Node End { get; set; }
-        private double SpringConstant { get; set; }
-
+        private GH_Node Start 
+        { 
+            get; 
+            set; 
+        }
+        
+        private GH_Node End 
+        { 
+            get; 
+            set; 
+        }
+        
+        private double SpringConstant 
+        { 
+            get;
+            set; 
+        }
 
         public GH_Spring(Point3d start, Point3d end, double springConstant)
         {
@@ -31,18 +41,9 @@ namespace SharpFEGrasshopper.Core.TypeClass
 
         public override void ToSharpElement(GH_Model model)
         {
-        	
-  
-        	
-        	Start.ToSharpElement(model);
-        	End.ToSharpElement(model);
-        	
-        	
-        	FiniteElementNode startNode = model.Nodes[Start.Index];
-        	FiniteElementNode endNode = model.Nodes[End.Index];
-        	
-        	model.Model.ElementFactory.CreateLinearConstantSpring(startNode,endNode, this.SpringConstant);
-        	
+        	IFiniteElementNode startNode = model.FindOrCreateNode(this.Start);
+            IFiniteElementNode endNode = model.FindOrCreateNode(this.End);
+        	model.Model.ElementFactory.CreateLinearConstantSpring(startNode, endNode, this.SpringConstant);        	
         }
     	
 		public override GeometryBase GetGeometry(GH_Model model)
