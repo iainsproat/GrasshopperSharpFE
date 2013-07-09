@@ -72,8 +72,7 @@ namespace SharpFEGrasshopper.Core.TypeClass
             
             foreach (GH_Node node in Nodes)
             {
-                node.ToSharpElement(model);
-                FiniteElementNode FEnode = model.Nodes[node.Index];
+                IFiniteElementNode FEnode = model.FindOrCreateNode(node);
                 model.Model.ApplyForceToNode(forceVector, FEnode);
             }
         }
