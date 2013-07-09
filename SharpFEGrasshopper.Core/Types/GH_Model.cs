@@ -13,19 +13,7 @@
             protected set;
         }
         
-        public List<FiniteElementNode> Nodes
-        {
-            get;
-            protected set;
-        }
-        
         public FiniteElementResults Results
-        {
-            get;
-            protected set;
-        }
-        
-        public List<Point3d> Points
         {
             get;
             protected set;
@@ -59,43 +47,30 @@
         {
             this.ModelType = modelType;
             this.Model = new FiniteElementModel(this.ModelType);
-            this.Nodes = new List<FiniteElementNode>();
-            this.Points = new List<Point3d>();
             this.Results = null;
             this.Elements = ele;
             this.Loads = lds;
             this.Supports = spts;
         }
         
-        public IFiniteElementNode FindOrCreateNode(GH_Node pos)
+        public IFiniteElementNode FindOrCreateNode(Point3d pos)
         {
-            FiniteElementNode node = null;
-            
-            //Check if node already exist at position
-            int index = this.Points.IndexOf(pos.Position);
-            if (index != -1)  //node already exists, so retrieve it and return
+            try
             {
-                node = this.Nodes[index];
-                pos.Index = index;
-                return node;
+                return this.Model.FindNodeNearTo(pos);
             }
-            
-            switch (this.ModelType)
+            catch (InvalidOperationException)
             {
-                case ModelType.Full3D:
-                    node = this.Model.NodeFactory.Create(pos.Position.X, pos.Position.Y, pos.Position.Z);
-                    break;
-                case ModelType.Truss2D:
-                    node = this.Model.NodeFactory.CreateFor2DTruss(pos.Position.X, pos.Position.Z);
-                    break;
-                default:
-                    throw new Exception("Model type not valid: " + this.ModelType);                 
+                switch (this.ModelType)
+                {
+                    case ModelType.Full3D:
+                        return this.Model.NodeFactory.Create(pos.X, pos.Y, pos.Z);
+                    case ModelType.Truss2D:
+                        return this.Model.NodeFactory.CreateFor2DTruss(pos.X, pos.Z);
+                    default:
+                        throw new Exception("Model type not valid: " + this.ModelType);
+                }
             }
-            
-            this.Nodes.Add(node);
-            this.Points.Add(pos.Position);
-            pos.Index = this.Points.Count - 1;
-            return node;
         }
 
         public override string ToString()
@@ -109,7 +84,7 @@
             this.Results = solver.Solve();
         }
         
-        public Vector3d GetNodeDisplacement(int nodeIndex)
+        public Vector3d GetNodeDisplacement(IFiniteElementNode node)
         {
             if (this.Results == null)
             {
@@ -117,7 +92,6 @@
             }
 
             Vector3d vector = new Vector3d();
-            FiniteElementNode node = this.Nodes[nodeIndex];
 
             switch (this.ModelType)
             {
@@ -177,7 +151,7 @@
             return vector;
         }
         
-        public Vector3d GetNodeReaction(int nodeIndex)
+        public Vector3d GetNodeReaction(Point3d location)
         {
             Vector3d vector = new Vector3d();
             
@@ -187,16 +161,25 @@
             }
             else
             {
-                FiniteElementNode node = this.Nodes[nodeIndex];
+                IFiniteElementNode node = this.Model.FindNodeNearTo(location);
                 ReactionVector reaction = this.Results.GetReaction(node);
+                vector.X = reaction.X;
+                vector.Y = reaction.Y;
+                vector.Z = reaction.Z;
             }
             
             return vector;
         }
         
-        public Point3d GetDisplacedPoint(int nodeIndex)
+        public Point3d GetDisplacedPoint(Point3d point)
         {
-            return this.Points[nodeIndex] + GetNodeDisplacement(nodeIndex);
+            IFiniteElementNode node = this.Model.FindNodeNearTo(point);
+            return this.GetDisplacedPoint(node);
+        }
+        
+        public Point3d GetDisplacedPoint(IFiniteElementNode node)
+        {
+            return node.ToPoint3d() + this.GetNodeDisplacement(node);
         }
         
         public void AssembleSharpModel()

@@ -7,7 +7,7 @@
 
     public class GH_ConstantStrainTriangle : GH_Element
     {
-        private List<GH_Node> Points
+        private IList<Point3d> Points
         {
             get;
             set;
@@ -27,10 +27,7 @@
 
         public GH_ConstantStrainTriangle(Point3d p0, Point3d p1, Point3d p2, GH_Material material, double thickness)
         {
-            this.Points = new List<GH_Node>();
-            this.Points.Add(new GH_Node(p0));
-            this.Points.Add(new GH_Node(p1));
-            this.Points.Add(new GH_Node(p2));
+            this.Points = new List<Point3d>{p0, p1, p2};
             
             this.Material = material;
             this.Thickness = thickness;

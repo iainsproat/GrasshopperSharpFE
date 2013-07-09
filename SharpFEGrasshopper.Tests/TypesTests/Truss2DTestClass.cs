@@ -49,19 +49,13 @@
             
             nodeSupport1 = new GH_NodeSupport(point1, true, true, true, true, true, true);
             nodeSupport2 = new GH_NodeSupport(point2, true, true, false, true, true, true);
-            
         }
         
         public void CanCreateTruss2DModel()
         {
-
-            
             Assert.NotNull(model);
             Assert.NotNull(model.Model);
-            Assert.NotNull(model.Nodes);
-            Assert.NotNull(model.Points);
             Assert.AreEqual(model.Model.ModelType, ModelType.Truss2D);
-            
         }
 
         
@@ -76,8 +70,6 @@
         {
             spring1.ToSharpElement(model);
             Assert.AreEqual(1, model.Model.ElementCount);
-            Assert.AreEqual(model.Nodes.Count, model.Points.Count);
-            Assert.AreEqual(2, model.Nodes.Count);
         }
         
         [Test]
@@ -118,8 +110,9 @@
             
             spring1.ToSharpElement(model);
             nodeSupport1.ToSharpSupport(model);
-            Assert.IsTrue(model.Model.IsConstrained(model.Nodes[0], DegreeOfFreedom.X));
-            Assert.IsTrue(model.Model.IsConstrained(model.Nodes[0], DegreeOfFreedom.Z));
+            IFiniteElementNode node1 = model.Model.FindNodeNearTo(point1);
+            Assert.IsTrue(model.Model.IsConstrained(node1, DegreeOfFreedom.X));
+            Assert.IsTrue(model.Model.IsConstrained(node1, DegreeOfFreedom.Z));
         }
         
         

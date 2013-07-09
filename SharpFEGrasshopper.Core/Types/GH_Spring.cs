@@ -8,13 +8,13 @@ namespace SharpFEGrasshopper.Core.TypeClass
 {
     public class GH_Spring : GH_Element
     {
-        private GH_Node Start 
+        private Point3d Start 
         { 
             get; 
             set; 
         }
         
-        private GH_Node End 
+        private Point3d End 
         { 
             get; 
             set; 
@@ -28,8 +28,8 @@ namespace SharpFEGrasshopper.Core.TypeClass
 
         public GH_Spring(Point3d start, Point3d end, double springConstant)
         {
-        	this.Start = new GH_Node(start);
-        	this.End = new GH_Node(end);
+        	this.Start = start;
+        	this.End = end;
         	this.SpringConstant = springConstant;
         }
 

@@ -11,7 +11,7 @@ namespace SharpFEGrasshopper.Core.TypeClass
     {
         private bool UX, UY, UZ, RX, RY, RZ;
         
-        private List<GH_Node> Nodes
+        private IList<Point3d> Nodes
         {
             get;
             set;
@@ -19,8 +19,8 @@ namespace SharpFEGrasshopper.Core.TypeClass
         
         public GH_NodeSupport(Point3d position, bool UX, bool UY, bool UZ, bool RX, bool RY, bool RZ)
         {
-            this.Nodes = new List<GH_Node>();
-            this.Nodes.Add(new GH_Node(position));
+            this.Nodes = new List<Point3d>();
+            this.Nodes.Add(position);
             this.UX = UX;
             this.UY = UY;
             this.UZ = UZ;
@@ -31,13 +31,7 @@ namespace SharpFEGrasshopper.Core.TypeClass
         
         public GH_NodeSupport(List<Point3d> positions, bool UX, bool UY, bool UZ, bool RX, bool RY, bool RZ)
         {
-            this.Nodes = new List<GH_Node>();
-            
-            foreach (Point3d position in positions)
-            {
-                this.Nodes.Add(new GH_Node(position));
-            }
-            
+            this.Nodes = positions;   
             this.UX = UX;
             this.UY = UY;
             this.UZ = UZ;
@@ -54,7 +48,7 @@ namespace SharpFEGrasshopper.Core.TypeClass
         public override void ToSharpSupport(GH_Model model)
         {
             
-            foreach (GH_Node node in Nodes)
+            foreach (Point3d node in Nodes)
             {
                 IFiniteElementNode FEnode = model.FindOrCreateNode(node);
                 

@@ -6,13 +6,13 @@
 
     public class GH_Beam : GH_Element
     {
-        private GH_Node Start
+        private Point3d Start
         {
             get;
             set;
         }
         
-        private GH_Node End
+        private Point3d End
         {
             get;
             set;
@@ -32,8 +32,8 @@
 
         public GH_Beam(Point3d start, Point3d end, GH_CrossSection crossSection, GH_Material material)
         {
-            this.Start = new GH_Node(start);
-            this.End = new GH_Node(end);
+            this.Start = start;
+            this.End = end;
 
             this.CrossSection = crossSection;
             this.Material = material;
@@ -53,13 +53,13 @@
 
         public override GeometryBase GetGeometry(GH_Model model)
         {
-            LineCurve line = new LineCurve(model.Points[Start.Index], model.Points[End.Index]);
+            LineCurve line = new LineCurve(this.Start, this.End);
             return line;
         }
 
         public override GeometryBase GetDeformedGeometry(GH_Model model)
         {
-            LineCurve line = new LineCurve(model.GetDisplacedPoint(Start.Index), model.GetDisplacedPoint(End.Index));
+            LineCurve line = new LineCurve(model.GetDisplacedPoint(this.Start), model.GetDisplacedPoint(this.End));
             return line;
         }
     }

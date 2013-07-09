@@ -22,7 +22,7 @@ namespace SharpFEGrasshopper.Core.TypeClass
             set;
         }
         
-        private List<GH_Node> Nodes
+        private IList<Point3d> Nodes
         {
             get;
             set;
@@ -30,20 +30,15 @@ namespace SharpFEGrasshopper.Core.TypeClass
         
         public GH_NodalLoad(Point3d position, Vector3d force, Vector3d moment)
         {
-            this.Nodes = new List<GH_Node>();
+            this.Nodes = new List<Point3d>();
             this.Force = force;
             this.Moment = moment;
-            this.Nodes.Add(new GH_Node(position));
+            this.Nodes.Add(position);
         }
 
         public GH_NodalLoad(List<Point3d> positions, Vector3d force, Vector3d moment)
         {
-            this.Nodes = new List<GH_Node>();
-            foreach(Point3d position in positions) 
-            {
-                this.Nodes.Add(new GH_Node(position));
-            }
-            
+            this.Nodes = positions;
             this.Force = force;
             this.Moment = moment;
             
@@ -70,7 +65,7 @@ namespace SharpFEGrasshopper.Core.TypeClass
                     throw new Exception("No such model type implemented: "  + model.ModelType);
             }
             
-            foreach (GH_Node node in Nodes)
+            foreach (Point3d node in Nodes)
             {
                 IFiniteElementNode FEnode = model.FindOrCreateNode(node);
                 model.Model.ApplyForceToNode(forceVector, FEnode);

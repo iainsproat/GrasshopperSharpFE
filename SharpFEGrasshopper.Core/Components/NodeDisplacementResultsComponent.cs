@@ -7,6 +7,7 @@ namespace SharpFEGrasshopper.Core.ClassComponent
 
     using Grasshopper.Kernel;
     using Rhino.Geometry;
+    using SharpFE;
     using SharpFEGrasshopper.Core.TypeClass;
     
     public class NodeDisplacementsComponent : GH_Component
@@ -41,10 +42,11 @@ namespace SharpFEGrasshopper.Core.ClassComponent
             List<Point3d> displacedPoints = new List<Point3d>();
             List<GeometryBase> displacedElements = new List<GeometryBase>();
 
-            for (int i = 0; i < model.Nodes.Count; i++)
+            foreach  (IFiniteElementNode node in model.Model)
             {
-                Vector3d vector = model.GetNodeDisplacement(i);
-                Point3d point = model.GetDisplacedPoint(i);
+                Point3d location = node.ToPoint3d();
+                Vector3d vector = model.GetNodeDisplacement(node);
+                Point3d point = model.GetDisplacedPoint(node);
                 displacementVectors.Add(vector);
                 displacedPoints.Add(point);
             }
