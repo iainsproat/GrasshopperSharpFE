@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
+﻿namespace SharpFEGrasshopper.Core.ClassComponent
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
 
-using Grasshopper.Kernel;
-using Rhino;
-using Rhino.Geometry;
-using SharpFE;
-using SharpFEGrasshopper.Core;
-using SharpFEGrasshopper.Core.TypeClass;
-using SharpGrasshopper;
-
-//using SharpFEGrasshopper.Properties;
-
-namespace SharpFEGrasshopper.Core.ClassComponent {
+    using Grasshopper.Kernel;
+    using SharpFE;
+    using SharpFEGrasshopper.Core.TypeClass;
+    using SharpGrasshopper;
 
     public class AssembleModelComponent : GH_Component
     {
-
         public AssembleModelComponent()
             : base("AssembleModel", "A", "Assemble SharpFE model", "SharpFE", "Application")
         {
@@ -51,12 +44,12 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
             int modelType = 0;
 
             if (!DA.GetDataList<GH_Element>(0, elements))
-            { 
+            {
                 return;
             }
             
             if (!DA.GetDataList<GH_Support>(1, supports))
-            { 
+            {
                 return;
             }
             
@@ -80,7 +73,7 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
                     break;
                 case 1:
                     model = new GH_Model(ModelType.Full3D, elements, loads, supports);
-                    break;  
+                    break;
                 default:
                     throw new Exception("Model type does not exist or not yet implemented");
             }
@@ -92,13 +85,16 @@ namespace SharpFEGrasshopper.Core.ClassComponent {
 
         public override Guid ComponentGuid
         {
-            get { return new Guid("dbf71b83-513f-4cc8-958d-0d4d4dc36538"); }
+            get 
+            { 
+                return new Guid("dbf71b83-513f-4cc8-958d-0d4d4dc36538"); 
+            }
         }
 
         protected override Bitmap Icon
         {
-            get 
-            { 
+            get
+            {
                 return Resources.SharpFEIcon;
             }
         }
