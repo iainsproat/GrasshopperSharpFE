@@ -46,10 +46,8 @@
 
         public override void ToSharpElement(GH_Model model)
         {
-            Start.ToSharpElement(model);
-            End.ToSharpElement(model);
-            IFiniteElementNode startNode = model.Nodes[Start.Index];
-            IFiniteElementNode endNode = model.Nodes[End.Index];
+            IFiniteElementNode startNode = model.FindOrCreateNode(this.Start);
+            IFiniteElementNode endNode = model.FindOrCreateNode(this.End);
             model.Model.ElementFactory.CreateLinear3DBeam(startNode, endNode, Material.ToSharpMaterial(), CrossSection.ToSharpCrossSection());
         }
 

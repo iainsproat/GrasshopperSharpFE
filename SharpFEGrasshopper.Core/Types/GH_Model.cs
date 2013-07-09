@@ -66,6 +66,37 @@
             this.Loads = lds;
             this.Supports = spts;
         }
+        
+        public IFiniteElementNode FindOrCreateNode(GH_Node pos)
+        {
+            FiniteElementNode node = null;
+            
+            //Check if node already exist at position
+            int index = this.Points.IndexOf(pos.Position);
+            if (index != -1)  //node already exists, so retrieve it and return
+            {
+                node = this.Nodes[index];
+                pos.Index = index;
+                return node;
+            }
+            
+            switch (this.ModelType)
+            {
+                case ModelType.Full3D:
+                    node = this.Model.NodeFactory.Create(pos.Position.X, pos.Position.Y, pos.Position.Z);
+                    break;
+                case ModelType.Truss2D:
+                    node = this.Model.NodeFactory.CreateFor2DTruss(pos.Position.X, pos.Position.Z);
+                    break;
+                default:
+                    throw new Exception("Model type not valid: " + this.ModelType);                 
+            }
+            
+            this.Nodes.Add(node);
+            this.Points.Add(pos.Position);
+            pos.Index = this.Points.Count - 1;
+            return node;
+        }
 
         public override string ToString()
         {
