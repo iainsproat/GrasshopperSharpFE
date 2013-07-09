@@ -21,7 +21,7 @@
             pManager.AddGenericParameter("Elements", "E", "Elements", GH_ParamAccess.list);
             pManager.AddGenericParameter("Supports", "S", "Supports", GH_ParamAccess.list);
             pManager.AddGenericParameter("Loads", "L", "Loads", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("ModelType","T", "Model type: 0 = 2D truss, 1 = 3D full, 2 = 2D membrane", GH_ParamAccess.item, 1);
+            pManager.AddIntegerParameter("ModelType","T", "Model type: 0 = 2D truss, 1 = 3D full, 2 = 3D membrane", GH_ParamAccess.item, 1);
 
             pManager[0].Optional = true;
             pManager[1].Optional = true;
@@ -75,7 +75,7 @@
                     model = new GH_Model(ModelType.Full3D, elements, loads, supports);
                     break;
                 case 2:
-                    model = new GH_Model(ModelType.Membrane2D, elements, loads, supports);
+                    model = new GH_Model(ModelType.Membrane3D, elements, loads, supports);
                     break;
                 default:
                     throw new Exception("Model type does not exist or not yet implemented");

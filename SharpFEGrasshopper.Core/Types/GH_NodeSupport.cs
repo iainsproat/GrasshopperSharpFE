@@ -70,10 +70,10 @@ namespace SharpFEGrasshopper.Core.TypeClass
                         if (RY) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.YY);}
                         if (RZ) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.ZZ);}
                         break;
-                    case ModelType.Membrane2D:
+                    case ModelType.Membrane3D:
                         if (UX) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.X);}
                         if (UY) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.Y);}
-                        // if (UZ) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.Z);}
+                        if (UZ) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.Z);}
                         // if (RX) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.XX);}
                         // if (RY) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.YY);}
                         // if (RZ) {model.Model.ConstrainNode(FEnode, DegreeOfFreedom.ZZ);}

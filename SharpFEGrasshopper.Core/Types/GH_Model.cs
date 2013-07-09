@@ -67,8 +67,8 @@
                         return this.Model.NodeFactory.Create(pos.X, pos.Y, pos.Z);
                     case ModelType.Truss2D:
                         return this.Model.NodeFactory.CreateFor2DTruss(pos.X, pos.Z);
-                    case ModelType.Membrane2D:
-                        return this.Model.NodeFactory.Create(pos.X, pos.Y);
+                    case ModelType.Membrane3D:
+                        return this.Model.NodeFactory.Create(pos.X, pos.Y, pos.Z);
                     default:
                         throw new Exception("Model type not valid: " + this.ModelType);
                 }
@@ -117,6 +117,7 @@
                     }
                     
                     break;
+                case ModelType.Membrane3D:
                 case ModelType.Full3D:
                     if (this.Model.IsConstrained(node, DegreeOfFreedom.X))
                     {
@@ -145,25 +146,6 @@
                         vector.Z = Results.GetDisplacement(node).Z;
                     }
                     
-                    break;
-                case ModelType.Membrane2D:
-                    if (this.Model.IsConstrained(node, DegreeOfFreedom.X))
-                    {
-                        vector.X = 0;
-                    }
-                    else
-                    {
-                        vector.X = Results.GetDisplacement(node).X;
-                    }
-                    
-                    if (this.Model.IsConstrained(node, DegreeOfFreedom.Y))
-                    {
-                        vector.Y = 0;
-                    }
-                    else
-                    {
-                        vector.Y = Results.GetDisplacement(node).Y;
-                    }
                     break;
                 default:
                     throw new Exception("No such model type: " + this.ModelType);

@@ -61,8 +61,8 @@ namespace SharpFEGrasshopper.Core.TypeClass
                 case ModelType.Full3D:
                     forceVector = model.Model.ForceFactory.Create(Force.X, Force.Y, Force.Z, Moment.X, Moment.Y, Moment.Z);
                     break;
-                case ModelType.Membrane2D:
-                    forceVector = model.Model.ForceFactory.Create(Force.X, Force.Y, 0, 0, 0, 0);
+                case ModelType.Membrane3D:
+                    forceVector = model.Model.ForceFactory.Create(Force.X, Force.Y, Force.Z, 0, 0, 0);
                     break;
                 default:
                     throw new Exception("No such model type implemented: "  + model.ModelType);
